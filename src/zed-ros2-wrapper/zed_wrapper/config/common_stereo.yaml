@@ -161,7 +161,7 @@
             publish_det_plane: false # Advertise the plane detection topics that is published only if a node subscribes to it
 
         object_detection:
-            od_enabled: true # True to enable Object Detection
+            od_enabled: false # True to enable Object Detection
             enable_tracking: true # Whether the object detection system includes object tracking capabilities across a sequence of images.
             detection_model: 'MULTI_CLASS_BOX_MEDIUM' # 'MULTI_CLASS_BOX_FAST', 'MULTI_CLASS_BOX_MEDIUM', 'MULTI_CLASS_BOX_ACCURATE', 'PERSON_HEAD_BOX_FAST', 'PERSON_HEAD_BOX_ACCURATE', 'CUSTOM_YOLOLIKE_BOX_OBJECTS'
             max_range: 20.0 # [m] Upper depth range for detections.The value cannot be greater than 'depth.max_depth'
