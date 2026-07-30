@@ -5,7 +5,6 @@ docker rm -f clearpath-husky-noetic 2>/dev/null || true
 docker run \
   --name clearpath-husky-noetic \
   --rm \
-  -it \
   --privileged \
   --network host \
   --ipc host \
