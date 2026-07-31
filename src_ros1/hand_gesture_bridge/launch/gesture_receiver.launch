@@ -1,0 +1,12 @@
+<launch>
+
+    <node
+        pkg="hand_gesture_bridge"
+        type="gesture_receiver.py"
+        name="gesture_receiver"
+        output="screen"
+        respawn="true"
+        respawn_delay="2.0"
+    />
+
+</launch>

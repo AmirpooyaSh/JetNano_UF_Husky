@@ -1,0 +1,8 @@
+int32 skeleton_index
+geometry_msgs/Point position
+
+string left_gesture
+float32 left_gesture_confidence
+
+string right_gesture
+float32 right_gesture_confidence

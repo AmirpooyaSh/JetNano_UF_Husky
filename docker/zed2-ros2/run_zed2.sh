@@ -11,8 +11,6 @@ CONTAINER_SRC="/root/ros2_ws/src"
 HOST_ZED_RESOURCES="$HOME/catkin_ws/docker/zed2-ros2/zed2-resources"
 CONTAINER_ZED_RESOURCES="/usr/local/zed/resources"
 
-mkdir -p "$HOST_ZED_RESOURCES"
-
 # ---------------------------------------------------------------
 # Create/reuse persistent container
 # ---------------------------------------------------------------
