@@ -82,5 +82,14 @@ RUN printf '%s\n' \
     > /ros_entrypoint.sh && \
     chmod +x /ros_entrypoint.sh
 
+# MediaPipe + OpenCV support for ROS2 image processing
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-humble-cv-bridge \
+    python3-opencv \
+    && python3 -m pip install --no-cache-dir \
+        "numpy<2" \
+        mediapipe-nightly==0.10.36rc20260527 \
+    && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
