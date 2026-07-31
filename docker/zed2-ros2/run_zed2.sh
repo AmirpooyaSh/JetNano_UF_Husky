@@ -14,12 +14,11 @@ CONTAINER_ZED_RESOURCES="/usr/local/zed/resources"
 mkdir -p "$HOST_ZED_RESOURCES"
 
 # ---------------------------------------------------------------
-# Create/reuse the persistent container.
+# Create/reuse persistent container
 # ---------------------------------------------------------------
 
 if ! docker container inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
 
-    # Persistent colcon build directories
     docker volume create zed2-build >/dev/null
     docker volume create zed2-install >/dev/null
     docker volume create zed2-log >/dev/null
@@ -42,32 +41,15 @@ if ! docker container inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
       sleep infinity
 
 else
-    docker start "$CONTAINER_NAME" >/dev/null
+
+    # Restart clears any previously running ROS2 nodes
+    # without deleting container modifications.
+    docker restart "$CONTAINER_NAME" >/dev/null
+
 fi
 
 # ---------------------------------------------------------------
-# Refresh X11 authorization for the current SSH session.
-# ---------------------------------------------------------------
-
-XAUTH_FILE="/tmp/zed2-docker.xauth"
-
-rm -f "$XAUTH_FILE"
-touch "$XAUTH_FILE"
-
-xauth nlist "$DISPLAY" \
-  | sed -e 's/^..../ffff/' \
-  | xauth -f "$XAUTH_FILE" nmerge -
-
-chmod 644 "$XAUTH_FILE"
-
-docker cp \
-  "$XAUTH_FILE" \
-  "$CONTAINER_NAME:/root/.Xauthority"
-
-rm -f "$XAUTH_FILE"
-
-# ---------------------------------------------------------------
-# Install dependencies for packages in ros2_ws/src.
+# Install ROS dependencies
 # ---------------------------------------------------------------
 
 docker exec "$CONTAINER_NAME" bash -lc '
@@ -81,11 +63,7 @@ docker exec "$CONTAINER_NAME" bash -lc '
 '
 
 # ---------------------------------------------------------------
-# Build workspace.
-#
-# build/install/log are persistent Docker volumes.
-# Unchanged packages such as zed_components should therefore
-# not be rebuilt from scratch every time.
+# Build workspace
 # ---------------------------------------------------------------
 
 docker exec "$CONTAINER_NAME" bash -lc '
@@ -101,12 +79,23 @@ docker exec "$CONTAINER_NAME" bash -lc '
 '
 
 # ---------------------------------------------------------------
-# Launch Terminator INSIDE Docker.
-# New tabs/splits remain inside the container.
+# Automatically launch:
+#
+#   1. ZED2
+#   2. Skeleton visualizer / gesture recognition
+#   3. ROS2 -> ROS1 ZeroMQ sender
+#
+# Runs detached in the background.
 # ---------------------------------------------------------------
 
-docker exec \
-  -e DISPLAY="$DISPLAY" \
-  -e XAUTHORITY=/root/.Xauthority \
-  -it "$CONTAINER_NAME" \
-  terminator
+docker exec -d "$CONTAINER_NAME" bash -lc '
+    cd /root/ros2_ws &&
+    source /opt/ros/humble/setup.bash &&
+    source install/setup.bash &&
+    exec ros2 launch \
+      hand_gesture_recognition \
+      zed2_skeleton.launch.py
+'
+
+echo "ZED2 ROS2 stack started."
+echo "Container: $CONTAINER_NAME"

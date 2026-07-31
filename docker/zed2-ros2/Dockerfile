@@ -91,5 +91,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         mediapipe-nightly==0.10.36rc20260527 \
     && rm -rf /var/lib/apt/lists/*
 
+# ZeroMQ Python support for ROS2 <-> ROS1 bridge
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-zmq \
+    && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]

@@ -33,7 +33,15 @@ def generate_launch_description():
         output='screen'
     )
 
+    gesture_bridge_sender = Node(
+        package='hand_gesture_recognition',
+        executable='gesture_bridge_sender',
+        name='gesture_bridge_sender',
+        output='screen'
+    )
+
     return LaunchDescription([
         start_zed2,
         skeleton_visualizer,
+        gesture_bridge_sender,
     ])
