@@ -184,6 +184,11 @@ RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
     catkin init && \
     catkin config --extend /opt/ros/noetic"
 
+# SICK LMS111 / sick_scan_xd
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-sick-scan-xd \
+    && rm -rf /var/lib/apt/lists/*
+
 # ---------------------------------------------------------------
 # Shell setup
 # ---------------------------------------------------------------
