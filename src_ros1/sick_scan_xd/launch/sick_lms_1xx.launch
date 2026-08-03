@@ -2,7 +2,7 @@
 <!-- FOR FUTURE USE. NOT SUPPORTED NOW. DO NOT USE IT. -->
 <!-- Using node option required="true" will close roslaunch after node exits -->
 <launch>
-    <arg name="hostname" default="192.168.0.1"/>
+    <arg name="hostname" default="192.168.131.20"/>
     <arg name="cloud_topic" default="cloud"/>
     <arg name="laserscan_topic" default="scan"/>
     <arg name="frame_id" default="cloud"/>
