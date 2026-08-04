@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<launch>
+    <include file="$(find sick_scan_xd)/launch/sick_lms_1xx.launch">
+        <arg name="hostname" value="192.168.131.20"/>
+    </include>
+</launch>
