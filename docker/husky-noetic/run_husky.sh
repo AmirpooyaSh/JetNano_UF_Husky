@@ -34,6 +34,26 @@ HUSKY_PORT="${HUSKY_PORT:-/dev/ttyUSB0}"
 HUSKY_LOGITECH="${HUSKY_LOGITECH:-1}"
 HUSKY_JOY_DEVICE="${HUSKY_JOY_DEVICE:-/dev/input/js0}"
 
+# Husky built-in SICK LMS1xx URDF configuration
+HUSKY_LMS1XX_ENABLED="${HUSKY_LMS1XX_ENABLED:-1}"
+HUSKY_LMS1XX_PREFIX="${HUSKY_LMS1XX_PREFIX:-front}"
+HUSKY_LMS1XX_PARENT="${HUSKY_LMS1XX_PARENT:-top_plate_link}"
+
+# Position of the LiDAR mount relative to top_plate_link
+# Format: x y z, in metres
+HUSKY_LMS1XX_XYZ="${HUSKY_LMS1XX_XYZ:-0.2206 0.0 0.00635}"
+
+# Orientation relative to top_plate_link
+# Format: roll pitch yaw, in radians
+HUSKY_LMS1XX_RPY="${HUSKY_LMS1XX_RPY:-0.0 0.0 0.0}"
+
+# 1 = include Clearpath's physical LMS1xx mounting tower
+# 0 = sensor without the tower mesh
+HUSKY_LMS1XX_TOWER="${HUSKY_LMS1XX_TOWER:-1}"
+
+HUSKY_LMS1XX_TOPIC="${HUSKY_LMS1XX_TOPIC:-scan}"
+
+
 FORCE_REBUILD="${FORCE_REBUILD:-0}"
 RVIZ_SOFTWARE_RENDERING="${RVIZ_SOFTWARE_RENDERING:-1}"
 
@@ -156,6 +176,13 @@ docker run -d \
     -e HUSKY_PORT="$HUSKY_PORT" \
     -e HUSKY_LOGITECH="$HUSKY_LOGITECH" \
     -e HUSKY_JOY_DEVICE="$HUSKY_JOY_DEVICE" \
+    -e HUSKY_LMS1XX_ENABLED="$HUSKY_LMS1XX_ENABLED" \
+    -e HUSKY_LMS1XX_PREFIX="$HUSKY_LMS1XX_PREFIX" \
+    -e HUSKY_LMS1XX_PARENT="$HUSKY_LMS1XX_PARENT" \
+    -e HUSKY_LMS1XX_XYZ="$HUSKY_LMS1XX_XYZ" \
+    -e HUSKY_LMS1XX_RPY="$HUSKY_LMS1XX_RPY" \
+    -e HUSKY_LMS1XX_TOWER="$HUSKY_LMS1XX_TOWER" \
+    -e HUSKY_LMS1XX_TOPIC="$HUSKY_LMS1XX_TOPIC" \
     -v /dev:/dev \
     -v /dev/shm:/dev/shm \
     -v /dev/bus/usb:/dev/bus/usb \

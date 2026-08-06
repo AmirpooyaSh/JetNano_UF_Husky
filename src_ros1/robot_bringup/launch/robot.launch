@@ -11,7 +11,10 @@
 
     <!-- SICK LMS1xx IP address -->
     <arg name="lidar_hostname" default="192.168.131.20" />
-
+    <!-- SICK LMS1xx Parental Frame -->
+    <arg name="tf_base_frame_id" default="base_link" />
+    <!-- SICK LMS1xx Transform -->
+    <arg name="add_transform_xyz_rpy" default="0,0,0,0,0,0" />
 
     <!-- =========================================================
          Husky hardware driver
@@ -65,6 +68,10 @@
 
     <include file="$(find sick_scan_xd)/launch/sick_lms_1xx.launch">
         <arg name="hostname" value="$(arg lidar_hostname)" />
+        <!-- Must match the frame created by the Husky URDF -->
+        <arg name="frame_id" value="front_laser" />
+        <!-- URDF + robot_state_publisher owns this transform -->
+        <arg name="tf_publish_rate" value="0.0" />
     </include>
 
 </launch>
