@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!--
+    Custom 20x40 mm aluminum-extrusion frame for Husky A200.
+
+    Coordinate convention:
+      +x = robot front
+      +y = robot left
+      +z = up
+
+    Parent:
+      top_plate_link
+
+    Dimensions from the physical structure:
+      post height:                    0.300 m
+      post center spacing, x:         0.485 m
+      post center spacing, y:         0.490 m
+      front/rear beam length:         0.600 m
+      left/right beam length:         0.600 m
+      profile section:                0.040 x 0.020 m
+
+    Measured placement:
+      frame center is 0.065 m rearward from the top-plate center.
+      left/right placement is centered.
+
+    Beam orientation:
+      front/rear beams are laid flat: 0.040 x 0.600 x 0.020 m
+      left/right beams are upright:   0.600 x 0.020 x 0.040 m
+      all top surfaces are at the same z level.
+  -->
+
+  <material name="custom_frame_dark_blue">
+    <color rgba="0.035 0.105 0.155 1.0"/>
+  </material>
+
+  <!--
+    Empty reference link on the TOP SURFACE of the Husky top plate,
+    centered within the four-post footprint.
+  -->
+  <link name="camera_frame_base_link"/>
+
+  <joint name="camera_frame_base_joint" type="fixed">
+    <parent link="top_plate_link"/>
+    <child link="camera_frame_base_link"/>
+    <!--
+      x = -0.065 m from measured 17 cm front / 4 cm rear clearances.
+      z = 0.0064 m, approximately the standard top-plate upper surface.
+    -->
+    <origin xyz="-0.065 0 0.0064" rpy="0 0 0"/>
+  </joint>
+
+
+  <!-- =========================================================
+       Four vertical 30 cm posts
+       Profile orientation: 40 mm front-rear, 20 mm left-right
+       ========================================================= -->
+
+  <link name="camera_frame_front_left_post">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.020 0.300"/></geometry>
+      <material name="custom_frame_dark_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.020 0.300"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_frame_front_left_post_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_front_left_post"/>
+    <origin xyz="0.2425 0.245 0.150" rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="camera_frame_front_right_post">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.020 0.300"/></geometry>
+      <material name="custom_frame_dark_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.020 0.300"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_frame_front_right_post_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_front_right_post"/>
+    <origin xyz="0.2425 -0.245 0.150" rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="camera_frame_rear_left_post">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.020 0.300"/></geometry>
+      <material name="custom_frame_dark_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.020 0.300"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_frame_rear_left_post_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_rear_left_post"/>
+    <origin xyz="-0.2425 0.245 0.150" rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="camera_frame_rear_right_post">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.020 0.300"/></geometry>
+      <material name="custom_frame_dark_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.020 0.300"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_frame_rear_right_post_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_rear_right_post"/>
+    <origin xyz="-0.2425 -0.245 0.150" rpy="0 0 0"/>
+  </joint>
+
+
+  <!-- =========================================================
+       Front and rear 60 cm beams, laid flat
+       Vertical thickness = 20 mm
+       Their centers are at post-top height, so their top is 1 cm
+       above the 30 cm post height.
+       ========================================================= -->
+
+  <link name="camera_frame_front_beam">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.600 0.020"/></geometry>
+      <material name="custom_frame_dark_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.600 0.020"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_frame_front_beam_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_front_beam"/>
+    <origin xyz="0.2425 0 0.300" rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="camera_frame_rear_beam">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.600 0.020"/></geometry>
+      <material name="custom_frame_dark_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.040 0.600 0.020"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_frame_rear_beam_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_rear_beam"/>
+    <origin xyz="-0.2425 0 0.300" rpy="0 0 0"/>
+  </joint>
+
+
+  <!-- =========================================================
+       Left and right 60 cm beams, upright
+       Vertical thickness = 40 mm
+       Their center is 0.290 m so their top is also 0.310 m.
+       ========================================================= -->
+
+  <link name="camera_frame_left_beam">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.600 0.020 0.040"/></geometry>
+      <material name="custom_frame_dark_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.600 0.020 0.040"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_frame_left_beam_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_left_beam"/>
+    <origin xyz="0 0.290 0.290" rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="camera_frame_right_beam">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.600 0.020 0.040"/></geometry>
+      <material name="custom_frame_dark_blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.600 0.020 0.040"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="camera_frame_right_beam_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_right_beam"/>
+    <origin xyz="0 -0.290 0.290" rpy="0 0 0"/>
+  </joint>
+
+
+  <!--
+    Empty reference frame at the center of the top surface.
+    Use this later as a convenient parent for the ZED2 mount.
+  -->
+  <link name="camera_frame_top_link"/>
+
+  <joint name="camera_frame_top_joint" type="fixed">
+    <parent link="camera_frame_base_link"/>
+    <child link="camera_frame_top_link"/>
+    <origin xyz="0 0 0.310" rpy="0 0 0"/>
+  </joint>
+
+</robot>

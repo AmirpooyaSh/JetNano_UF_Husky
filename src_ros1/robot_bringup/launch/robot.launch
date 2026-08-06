@@ -5,6 +5,8 @@
          Configurable arguments
          ========================================================= -->
 
+    <arg name="enable_lidar" default="true" />
+
     <!-- Husky serial port:
          Uses HUSKY_PORT when set, otherwise /dev/prolific -->
     <arg name="port" default="$(optenv HUSKY_PORT /dev/prolific)" />
@@ -66,12 +68,12 @@
          SICK LMS1xx LiDAR
          ========================================================= -->
 
-    <include file="$(find sick_scan_xd)/launch/sick_lms_1xx.launch">
-        <arg name="hostname" value="$(arg lidar_hostname)" />
-        <!-- Must match the frame created by the Husky URDF -->
-        <arg name="frame_id" value="front_laser" />
-        <!-- URDF + robot_state_publisher owns this transform -->
-        <arg name="tf_publish_rate" value="0.0" />
-    </include>
+     <group if="$(arg enable_lidar)">
+     <include file="$(find sick_scan_xd)/launch/sick_lms_1xx.launch">
+          <arg name="hostname" value="$(arg lidar_hostname)" />
+          <arg name="frame_id" value="front_laser" />
+          <arg name="tf_publish_rate" value="0.0" />
+     </include>
+     </group>
 
 </launch>

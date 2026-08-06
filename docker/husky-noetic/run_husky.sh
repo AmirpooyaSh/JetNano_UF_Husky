@@ -34,6 +34,8 @@ HUSKY_PORT="${HUSKY_PORT:-/dev/ttyUSB0}"
 HUSKY_LOGITECH="${HUSKY_LOGITECH:-1}"
 HUSKY_JOY_DEVICE="${HUSKY_JOY_DEVICE:-/dev/input/js0}"
 
+HUSKY_URDF_EXTRAS="${HUSKY_URDF_EXTRAS:-/catkin_ws/src/robot_bringup/urdf/husky_camera_frame.urdf.xacro}"
+
 # Husky built-in SICK LMS1xx URDF configuration
 HUSKY_LMS1XX_ENABLED="${HUSKY_LMS1XX_ENABLED:-1}"
 HUSKY_LMS1XX_PREFIX="${HUSKY_LMS1XX_PREFIX:-front}"
@@ -183,6 +185,7 @@ docker run -d \
     -e HUSKY_LMS1XX_RPY="$HUSKY_LMS1XX_RPY" \
     -e HUSKY_LMS1XX_TOWER="$HUSKY_LMS1XX_TOWER" \
     -e HUSKY_LMS1XX_TOPIC="$HUSKY_LMS1XX_TOPIC" \
+    -e HUSKY_URDF_EXTRAS="$HUSKY_URDF_EXTRAS" \
     -v /dev:/dev \
     -v /dev/shm:/dev/shm \
     -v /dev/bus/usb:/dev/bus/usb \
