@@ -96,5 +96,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-zmq \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        ros-humble-xacro \
+        ros-humble-zed-description \
+        ros-humble-image-transport-plugins \
+        ros-humble-compressed-image-transport \
+        ros-humble-compressed-depth-image-transport \
+        ros-humble-theora-image-transport \
+        ros-humble-zed-msgs \
+        ros-humble-backward-ros \
+        nlohmann-json3-dev \
+        ros-humble-nmea-msgs \
+        ros-humble-geographic-msgs \
+        ros-humble-diagnostic-updater \
+        ros-humble-robot-localization \
+    && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
