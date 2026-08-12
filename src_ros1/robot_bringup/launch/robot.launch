@@ -18,6 +18,9 @@
     <!-- SICK LMS1xx Transform -->
     <arg name="add_transform_xyz_rpy" default="0,0,0,0,0,0" />
 
+     <arg name="lidar_topic"
+          default="$(optenv HUSKY_LMS1XX_TOPIC front/scan)" />
+
     <!-- =========================================================
          Husky hardware driver
          ========================================================= -->
@@ -71,7 +74,14 @@
      <group if="$(arg enable_lidar)">
      <include file="$(find sick_scan_xd)/launch/sick_lms_1xx.launch">
           <arg name="hostname" value="$(arg lidar_hostname)" />
+
+          <!-- Husky navigation expects /front/scan -->
+          <arg name="laserscan_topic" value="$(arg lidar_topic)" />
+
+          <!-- Matches the Husky URDF -->
           <arg name="frame_id" value="front_laser" />
+
+          <!-- URDF owns base_link -> front_laser -->
           <arg name="tf_publish_rate" value="0.0" />
      </include>
      </group>
