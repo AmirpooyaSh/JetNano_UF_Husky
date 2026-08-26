@@ -233,4 +233,170 @@
     <origin xyz="0 0 0.310" rpy="0 0 0"/>
   </joint>
 
+  <!-- =========================================================
+       ZED2 CAMERA
+       =========================================================
+
+       Parent frame:
+         camera_frame_top_link
+
+       Coordinate convention:
+         +x = Husky front
+         +y = Husky left
+         +z = up
+
+       The ZED2 is physically mounted near the front of the
+       aluminum frame and pitched downward by approximately 30 deg.
+       ========================================================= -->
+
+  <!--
+    Mounting pose relative to camera_frame_top_link.
+
+    x:
+      Front beam center is approximately +0.2425 m.
+      Adjust this after measuring the actual ZED mounting screw.
+
+    y:
+      Positive = robot left
+      Negative = robot right
+
+    z:
+      Vertical distance from the top-frame reference surface to
+      the ZED2's mounting point.
+
+    pitch:
+      +0.523599 rad = approximately 30 degrees downward,
+      assuming the camera faces robot +x.
+  -->
+
+  <xacro:property name="zed2_mount_x" value="0.2425"/>
+  <xacro:property name="zed2_mount_y" value="0.0"/>
+  <xacro:property name="zed2_mount_z" value="0.100"/>
+
+  <xacro:property name="zed2_mount_roll"  value="0.0"/>
+  <xacro:property name="zed2_mount_pitch" value="-0.523599"/>
+  <xacro:property name="zed2_mount_yaw"   value="0.0"/>
+
+
+  <!-- =========================================================
+       ZED2 physical mounting frame
+       ========================================================= -->
+
+  <link name="zed_camera_link"/>
+
+  <joint name="zed_camera_mount_joint" type="fixed">
+    <parent link="camera_frame_top_link"/>
+    <child link="zed_camera_link"/>
+
+    <origin
+      xyz="${zed2_mount_x} ${zed2_mount_y} ${zed2_mount_z}"
+      rpy="${zed2_mount_roll} ${zed2_mount_pitch} ${zed2_mount_yaw}"/>
+  </joint>
+
+
+  <!-- =========================================================
+       ZED2 body
+       
+       Official ZED2 geometry uses approximately:
+         stereo baseline = 0.120 m
+         body height     = 0.030 m
+         bottom slope    = 0.050 rad
+       ========================================================= -->
+
+  <link name="zed_camera_center">
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+
+      <geometry>
+        <mesh filename="package://robot_bringup/meshes/zed2.stl"/>
+      </geometry>
+
+      <material name="zed2_dark">
+        <color rgba="0.25 0.25 0.25 1.0"/>
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+
+      <geometry>
+        <mesh filename="package://robot_bringup/meshes/zed2.stl"/>
+      </geometry>
+    </collision>
+
+  </link>
+
+
+  <!--
+    The official ZED2 description accounts for the small physical
+    slope of the camera body.
+  -->
+  <joint name="zed_camera_center_joint" type="fixed">
+    <parent link="zed_camera_link"/>
+    <child link="zed_camera_center"/>
+
+    <origin xyz="0 0 0.015" rpy="0 0.05 0"/>
+  </joint>
+
+
+  <!-- =========================================================
+       LEFT CAMERA
+       ========================================================= -->
+
+  <link name="zed_left_camera_frame"/>
+
+  <joint name="zed_left_camera_joint" type="fixed">
+    <parent link="zed_camera_center"/>
+    <child link="zed_left_camera_frame"/>
+
+    <!--
+      Official ZED2:
+        optical x offset = -0.010 m
+        half baseline    = +0.060 m
+    -->
+    <origin xyz="-0.010 0.060 0" rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="zed_left_camera_frame_optical"/>
+
+  <joint name="zed_left_camera_joint_optical" type="fixed">
+    <parent link="zed_left_camera_frame"/>
+    <child link="zed_left_camera_frame_optical"/>
+
+    <!-- REP-103 optical convention:
+         +z forward
+         +x right
+         +y down
+    -->
+    <origin xyz="0 0 0"
+            rpy="-1.57079632679 0 -1.57079632679"/>
+  </joint>
+
+
+  <!-- =========================================================
+       RIGHT CAMERA
+       ========================================================= -->
+
+  <link name="zed_right_camera_frame"/>
+
+  <joint name="zed_right_camera_joint" type="fixed">
+    <parent link="zed_camera_center"/>
+    <child link="zed_right_camera_frame"/>
+
+    <origin xyz="-0.010 -0.060 0" rpy="0 0 0"/>
+  </joint>
+
+
+  <link name="zed_right_camera_frame_optical"/>
+
+  <joint name="zed_right_camera_joint_optical" type="fixed">
+    <parent link="zed_right_camera_frame"/>
+    <child link="zed_right_camera_frame_optical"/>
+
+    <origin xyz="0 0 0"
+            rpy="-1.57079632679 0 -1.57079632679"/>
+  </joint>
+
 </robot>
