@@ -11,7 +11,14 @@
     <arg name="add_transform_check_dynamic_updates" default="false"/> <!-- Note: dynamical updates of parameter add_transform_xyz_rpy can decrease the performance and is therefor deactivated by default -->
     <!-- robot_description and robot_state_publisher hier evtl. einbauen  -->
     <arg name="tf_publish_rate" default="10.0" />                     <!-- Rate to publish TF messages in hz, use 0 to deactivate TF messages -->
-    <node name="$(arg nodename)" pkg="sick_scan_xd" type="sick_generic_caller" respawn="false" output="screen" required="true">
+    <!-- Changed Manually -->
+    <node name="$(arg nodename)"
+        pkg="sick_scan_xd"
+        type="sick_generic_caller"
+        respawn="true"
+        respawn_delay="5.0"
+        output="screen"
+        required="false">
         <!-- default values: -->
         <!--
           <param name="scanner_type" type="string" value="sick_lms_1xxx"
