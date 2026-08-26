@@ -205,6 +205,20 @@ include_directories(
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
+
+# Install the ROS1 ZeroMQ receiver as an executable node.
+catkin_install_python(
+  PROGRAMS
+    scripts/gesture_receiver.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+# Install launch files so they are available from install_isolated.
+install(
+  DIRECTORY launch/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+)
+
 #############
 ## Testing ##
 #############

@@ -6,6 +6,7 @@
          ========================================================= -->
 
     <arg name="enable_lidar" default="true" />
+    <arg name="enable_gesture_bridge" default="true" />
 
     <!-- Husky serial port:
          Uses HUSKY_PORT when set, otherwise /dev/prolific -->
@@ -85,5 +86,14 @@
           <arg name="tf_publish_rate" value="0.0" />
      </include>
      </group>
+
+
+    <!-- =========================================================
+         ROS2 -> ROS1 hand gesture ZeroMQ bridge
+         ========================================================= -->
+
+    <group if="$(arg enable_gesture_bridge)">
+        <include file="$(find hand_gesture_bridge)/launch/gesture_receiver.launch" />
+    </group>
 
 </launch>
