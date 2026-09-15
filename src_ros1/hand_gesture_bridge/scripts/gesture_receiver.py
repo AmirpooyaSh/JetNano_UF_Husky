@@ -52,7 +52,7 @@ class GestureReceiver:
 
         boxes = MarkerArray()
 
-        frame_id = msg.header.frame_id or "zed_camera_link"
+        frame_id = "base_link"
         stamp = rospy.Time.now()
 
         for skeleton in msg.skeletons:
@@ -76,10 +76,10 @@ class GestureReceiver:
 
             box.scale.x = 0.4
             box.scale.y = 0.4
-            box.scale.z = 0.05
+            box.scale.z = 1.0
 
-            box.color.r = 0.0
-            box.color.g = 1.0
+            box.color.r = 1.0
+            box.color.g = 0.0
             box.color.b = 0.0
             box.color.a = 0.8
 

@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 CONTAINER_NAME="zed2-ros2-humble"
 IMAGE_NAME="zed2-ros2-humble:latest"
@@ -12,39 +13,37 @@ HOST_ZED_RESOURCES="$HOME/catkin_ws/docker/zed2-ros2/zed2-resources"
 CONTAINER_ZED_RESOURCES="/usr/local/zed/resources"
 
 # ---------------------------------------------------------------
-# Create/reuse persistent container
+# Always create a fresh container.
+# Build/install/log data remains in persistent named volumes.
 # ---------------------------------------------------------------
 
-if ! docker container inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
+docker volume create zed2-build >/dev/null
+docker volume create zed2-install >/dev/null
+docker volume create zed2-log >/dev/null
 
-    docker volume create zed2-build >/dev/null
-    docker volume create zed2-install >/dev/null
-    docker volume create zed2-log >/dev/null
+docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true
 
-    docker run -d \
-      --name "$CONTAINER_NAME" \
-      --runtime nvidia \
-      --privileged \
-      --network host \
-      --ipc host \
-      -e NVIDIA_DRIVER_CAPABILITIES=all \
-      -v /dev:/dev \
-      -v /dev/shm:/dev/shm \
-      -v "$HOST_SRC:$CONTAINER_SRC" \
-      -v "$HOST_ZED_RESOURCES:$CONTAINER_ZED_RESOURCES" \
-      -v zed2-build:/root/ros2_ws/build \
-      -v zed2-install:/root/ros2_ws/install \
-      -v zed2-log:/root/ros2_ws/log \
-      "$IMAGE_NAME" \
-      sleep infinity
-
-else
-
-    # Restart clears any previously running ROS2 nodes
-    # without deleting container modifications.
-    docker restart "$CONTAINER_NAME" >/dev/null
-
-fi
+docker run -d \
+  --name "$CONTAINER_NAME" \
+  --rm \
+  --runtime nvidia \
+  --privileged \
+  --network host \
+  --ipc host \
+  -e NVIDIA_VISIBLE_DEVICES=all \
+  -e NVIDIA_DRIVER_CAPABILITIES=all \
+  -v /dev:/dev \
+  -v /dev/shm:/dev/shm \
+  -v /dev/bus/usb:/dev/bus/usb \
+  -v /run/udev:/run/udev:ro \
+  -v "$HOST_SRC:$CONTAINER_SRC:rw" \
+  -v "$HOST_ZED_RESOURCES:$CONTAINER_ZED_RESOURCES:rw" \
+  -v zed2-build:/root/ros2_ws/build \
+  -v zed2-install:/root/ros2_ws/install \
+  -v zed2-log:/root/ros2_ws/log \
+  -w /root/ros2_ws \
+  "$IMAGE_NAME" \
+  sleep infinity
 
 # ---------------------------------------------------------------
 # Install ROS dependencies
