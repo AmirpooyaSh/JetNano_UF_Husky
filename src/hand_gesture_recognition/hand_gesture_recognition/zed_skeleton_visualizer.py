@@ -65,7 +65,7 @@ class ZedSkeletonVisualizer(Node):
         self.hand_crop_size = 300
 
         # Minimum MediaPipe gesture confidence
-        self.gesture_threshold = 0.50
+        self.gesture_threshold = 0.30
 
         # --------------------------------------------------------
         # MediaPipe Gesture Recognizer
