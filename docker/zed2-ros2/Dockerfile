@@ -113,5 +113,14 @@ RUN apt-get update && \
         ros-humble-robot-localization \
     && rm -rf /var/lib/apt/lists/*
 
+# Microphone capture and REST API clients
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    alsa-utils \
+    libasound2-dev \
+    portaudio19-dev \
+    python3-pyaudio \
+    python3-requests \
+    && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
