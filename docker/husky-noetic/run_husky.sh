@@ -31,7 +31,7 @@ HOST_ROBOT_LAUNCH="${HOST_SRC}/${ROBOT_LAUNCH_PACKAGE}/launch/${ROBOT_LAUNCH_FIL
 
 HUSKY_PORT="${HUSKY_PORT:-/dev/ttyUSB0}"
 HUSKY_LOGITECH="${HUSKY_LOGITECH:-1}"
-HUSKY_JOY_DEVICE="${HUSKY_JOY_DEVICE:-/dev/input/js0}"
+HUSKY_JOY_DEVICE="${HUSKY_JOY_DEVICE:-/dev/input/js1}"
 
 HUSKY_URDF_EXTRAS="${HUSKY_URDF_EXTRAS:-/catkin_ws/src/robot_bringup/urdf/husky_camera_frame.urdf.xacro}"
 

@@ -353,41 +353,9 @@ fi
 # Launch ONLY robot_bringup/robot.launch.
 # robot.launch contains both the Husky base and SICK LiDAR includes.
 # -----------------------------------------------------------------------------
-echo "[INFO] Starting only: ${ROBOT_LAUNCH_PACKAGE}/${ROBOT_LAUNCH_FILE}"
-echo "[INFO] HUSKY_PORT=$HUSKY_PORT"
-echo "[INFO] HUSKY_LOGITECH=$HUSKY_LOGITECH"
-echo "[INFO] HUSKY_JOY_DEVICE=$HUSKY_JOY_DEVICE"
 
-docker exec -d "$CONTAINER_NAME" /bin/bash -lc "
-    set -Ee -o pipefail
-    source /opt/ros/noetic/setup.bash
-
-    if [ -f /catkin_ws/install_isolated/setup.bash ]; then
-        source /catkin_ws/install_isolated/setup.bash
-    elif [ -f /catkin_ws/devel_isolated/setup.bash ]; then
-        source /catkin_ws/devel_isolated/setup.bash
-    fi
-
-    export ROS_LOG_DIR=/catkin_ws/log/ros
-    mkdir -p \"\$ROS_LOG_DIR\" /catkin_ws/log/robot_bringup
-    cd /catkin_ws
-
-    exec roslaunch '${ROBOT_LAUNCH_PACKAGE}' '${ROBOT_LAUNCH_FILE}' \
-        >> '${LAUNCH_LOG}' 2>&1
-"
-
-sleep 4
-
-if docker exec "$CONTAINER_NAME" /bin/bash -lc \
-    "pgrep -af '[r]oslaunch ${ROBOT_LAUNCH_PACKAGE} ${ROBOT_LAUNCH_FILE}' >/dev/null"; then
-    echo "[INFO] ${ROBOT_LAUNCH_PACKAGE}/${ROBOT_LAUNCH_FILE} is running."
-else
-    echo "[ERROR] ${ROBOT_LAUNCH_PACKAGE}/${ROBOT_LAUNCH_FILE} exited during startup." >&2
-    echo "[ERROR] Recent launch output:" >&2
-    docker exec "$CONTAINER_NAME" /bin/bash -lc \
-        "tail -n 120 '${LAUNCH_LOG}' 2>/dev/null || true" >&2
-    exit 1
-fi
+echo "[INFO] Automatic robot launch is disabled."
+echo "[INFO] Start manually with: roslaunch robot_bringup robot.launch"
 
 # -----------------------------------------------------------------------------
 # Host command used by every Terminator pane.
