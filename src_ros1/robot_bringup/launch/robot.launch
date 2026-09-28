@@ -27,7 +27,7 @@
          default="$(optenv HUSKY_IMU_PORT /dev/serial/by-id/usb-FTDI_Clearpath_Robotics__um7_FTBUGB7Q-if00-port0)" />
 
     <arg name="enable_speaker" default="true" />
-    <arg name="speaker_device" default="$(optenv HUSKY_SPEAKER_DEVICE plughw:CARD=<NAME>,DEV=0)" />
+    <arg name="speaker_device" default="$(optenv HUSKY_SPEAKER_DEVICE plughw:CARD=Device,DEV=0)" />
 
     <!-- =========================================================
          Husky hardware driver
