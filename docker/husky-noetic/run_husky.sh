@@ -43,6 +43,8 @@ HUSKY_LMS1XX_RPY="${HUSKY_LMS1XX_RPY:-0.0 0.0 0.0}"
 HUSKY_LMS1XX_TOWER="${HUSKY_LMS1XX_TOWER:-1}"
 HUSKY_LMS1XX_TOPIC="${HUSKY_LMS1XX_TOPIC:-front/scan}"
 
+HUSKY_IMU_RPY="${HUSKY_IMU_RPY:-0 0 0}"
+
 FORCE_REBUILD="${FORCE_REBUILD:-0}"
 
 BUILD_ISOLATED_VOLUME="${BUILD_ISOLATED_VOLUME:-clearpath-husky-noetic-build-isolated}"
@@ -138,6 +140,7 @@ docker run -d \
     -e HUSKY_LMS1XX_TOWER="$HUSKY_LMS1XX_TOWER" \
     -e HUSKY_LMS1XX_TOPIC="$HUSKY_LMS1XX_TOPIC" \
     -e HUSKY_URDF_EXTRAS="$HUSKY_URDF_EXTRAS" \
+    -e HUSKY_IMU_RPY="$HUSKY_IMU_RPY" \
     -v /dev:/dev \
     -v /dev/shm:/dev/shm \
     -v /dev/bus/usb:/dev/bus/usb \
