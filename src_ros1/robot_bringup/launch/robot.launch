@@ -55,6 +55,11 @@
 
     <include file="$(find husky_control)/launch/control.launch" />
 
+    <!-- Override Husky's default twist_mux topics: adds core_safety (priority 100) -->
+    <rosparam command="load"
+              file="$(find robot_bringup)/config/twist_mux.yaml"
+              ns="twist_mux" />
+
     <include file="$(find husky_control)/launch/teleop.launch" />
 
 
