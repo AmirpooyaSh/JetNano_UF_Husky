@@ -12,8 +12,9 @@ plays the matching pre-generated WAV file through the robot's USB speaker:
     PROCEED_ACCEPTED     -> proceed_accepted.wav
     PROCEED_REJECTED     -> proceed_rejected.wav
 
-A new announcement interrupts one that is still playing, so the speaker always
-reports the robot's latest decision.
+A different announcement interrupts one that is still playing, so the speaker
+always reports the robot's latest decision. The same announcement arriving
+again while it is still playing is ignored instead of restarting it.
 """
 
 import os
@@ -44,6 +45,7 @@ class AnnouncementPlayer:
 
         self.lock = threading.Lock()
         self.process = None
+        self.current_code = None
 
         missing = [
             code for code in sorted(VALID_CODES)
@@ -86,9 +88,18 @@ class AnnouncementPlayer:
             return
 
         with self.lock:
-            # The latest decision replaces anything still being spoken.
-            if self.process is not None and self.process.poll() is None:
+            playing = self.process is not None and self.process.poll() is None
+
+            # The same decision again while it is still being spoken is
+            # ignored, so the sentence is not restarted ("co... co... co...").
+            if playing and code == self.current_code:
+                rospy.loginfo("Already playing %s; repeat ignored.", code)
+                return
+
+            # A different decision replaces the one still being spoken.
+            if playing:
                 self.process.terminate()
+            self.current_code = code
 
             try:
                 self.process = subprocess.Popen(
