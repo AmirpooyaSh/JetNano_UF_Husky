@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<launch>
+    <!-- WhisperLive server -->
+    <arg name="whisper_host" default="127.0.0.1" />
+    <arg name="whisper_port" default="9090" />
+    <arg name="whisper_model" default="base.en" />
+    <arg name="same_output_threshold" default="2" />
+    <arg name="min_silence_duration_ms" default="300" />
+    <arg name="vad_onset" default="0.5" />
+    <arg name="print_partial" default="false" />
+
+    <!-- Ollama -->
+    <arg name="enable_classification" default="true" />
+    <arg name="ollama_url" default="http://127.0.0.1:11434/api/chat" />
+    <arg name="ollama_model" default="llama3.2:1b" />
+
+    <!-- Microphone: input_device = part of the device name,
+         or input_device_index = its number. Empty/-1 = default device.
+         Audio is resampled to 16 kHz mono before it is sent. -->
+    <arg name="input_device" default="AB13X" />
+    <arg name="input_device_index" default="-1" />
+    <arg name="sample_rate" default="48000" />
+    <arg name="channels" default="1" />
+    <arg name="audio_chunk" default="1024" />
+
+    <node pkg="voice_classifier"
+          type="voice_command_node.py"
+          name="voice_command_node"
+          output="screen">
+
+        <param name="whisper_host" value="$(arg whisper_host)" />
+        <param name="whisper_port" value="$(arg whisper_port)" />
+        <param name="whisper_model" value="$(arg whisper_model)" />
+        <param name="language" value="en" />
+        <param name="use_vad" value="true" />
+        <param name="vad_onset" value="$(arg vad_onset)" />
+        <param name="min_silence_duration_ms" value="$(arg min_silence_duration_ms)" />
+        <param name="same_output_threshold" value="$(arg same_output_threshold)" />
+        <param name="no_speech_thresh" value="0.45" />
+        <param name="max_connection_time" value="86400" />
+        <param name="reconnect_delay" value="2.0" />
+        <param name="print_partial" value="$(arg print_partial)" />
+
+        <param name="enable_classification" value="$(arg enable_classification)" />
+        <param name="ollama_url" value="$(arg ollama_url)" />
+        <param name="ollama_model" value="$(arg ollama_model)" />
+        <param name="ollama_timeout" value="60.0" />
+
+        <param name="input_device" value="$(arg input_device)" />
+        <param name="input_device_index" value="$(arg input_device_index)" />
+        <param name="sample_rate" value="$(arg sample_rate)" />
+        <param name="channels" value="$(arg channels)" />
+        <param name="audio_chunk" value="$(arg audio_chunk)" />
+    </node>
+</launch>

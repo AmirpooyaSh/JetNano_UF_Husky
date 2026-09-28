@@ -1,0 +1,15 @@
+[Unit]
+Description=Start WhisperLive server and load model
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/home/administrator/catkin_ws/docker/whisper-live/run.sh
+ExecStop=/usr/bin/docker stop whisper-live
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target

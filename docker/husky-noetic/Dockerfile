@@ -238,5 +238,13 @@ RUN printf '%s\n' \
     > /ros_entrypoint.sh && \
     chmod +x /ros_entrypoint.sh
 
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        python3-pyaudio \
+        python3-requests \
+        python3-numpy \
+        python3-websocket \
+    && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["terminator"]
