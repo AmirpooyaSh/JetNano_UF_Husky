@@ -26,6 +26,9 @@
     <arg name="imu_port"
          default="$(optenv HUSKY_IMU_PORT /dev/serial/by-id/usb-FTDI_Clearpath_Robotics__um7_FTBUGB7Q-if00-port0)" />
 
+    <arg name="enable_speaker" default="true" />
+    <arg name="speaker_device" default="$(optenv HUSKY_SPEAKER_DEVICE plughw:CARD=<NAME>,DEV=0)" />
+
     <!-- =========================================================
          Husky hardware driver
          ========================================================= -->
@@ -110,6 +113,16 @@
             <param name="frame_id" value="imu_link" />
             <!-- Motors and metal frame distort the compass indoors -->
             <param name="mag_updates" value="false" />
+        </node>
+    </group>
+
+    <group if="$(arg enable_speaker)">
+        <node pkg="robot_bringup"
+              type="announcement_player.py"
+              name="announcement_player"
+              output="screen">
+            <param name="sound_dir" value="$(find robot_bringup)/sounds" />
+            <param name="audio_device" value="$(arg speaker_device)" />
         </node>
     </group>
 

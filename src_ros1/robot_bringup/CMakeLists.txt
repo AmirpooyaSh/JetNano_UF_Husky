@@ -201,6 +201,16 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
+catkin_install_python(
+  PROGRAMS scripts/announcement_player.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(
+  DIRECTORY sounds/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/sounds
+)
+
 install(
   DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch

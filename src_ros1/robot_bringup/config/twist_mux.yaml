@@ -6,7 +6,7 @@ topics:
 - name    : joy
   topic   : joy_teleop/cmd_vel
   timeout : 0.5
-  priority: 10
+  priority: 110
 - name    : kb
   topic   : kb_teleop/cmd_vel
   timeout : 0.5
