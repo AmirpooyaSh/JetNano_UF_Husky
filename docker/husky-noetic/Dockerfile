@@ -246,5 +246,13 @@ RUN apt-get update && \
         python3-websocket \
     && rm -rf /var/lib/apt/lists/*
 
+        
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        python3-pyaudio \
+       # For the IMU sensor
+        ros-noetic-um7 \
+    && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["terminator"]

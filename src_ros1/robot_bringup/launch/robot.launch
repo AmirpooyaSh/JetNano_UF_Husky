@@ -22,6 +22,10 @@
      <arg name="lidar_topic"
           default="$(optenv HUSKY_LMS1XX_TOPIC front/scan)" />
 
+    <arg name="enable_imu" default="true" />
+    <arg name="imu_port"
+         default="$(optenv HUSKY_IMU_PORT /dev/serial/by-id/usb-FTDI_Clearpath_Robotics__um7_FTBUGB7Q-if00-port0)" />
+
     <!-- =========================================================
          Husky hardware driver
          ========================================================= -->
@@ -87,6 +91,22 @@
      </include>
      </group>
 
+    <!-- =========================================================
+         UM7 IMU (gyroscope) -> /imu/data, used by ekf_localization
+         ========================================================= -->
+
+    <group if="$(arg enable_imu)">
+        <node pkg="um7"
+              type="um7_driver"
+              name="um7_driver"
+              output="screen">
+            <param name="port" value="$(arg imu_port)" />
+            <param name="baud" value="115200" />
+            <param name="frame_id" value="imu_link" />
+            <!-- Motors and metal frame distort the compass indoors -->
+            <param name="mag_updates" value="false" />
+        </node>
+    </group>
 
     <!-- =========================================================
          ROS2 -> ROS1 hand gesture ZeroMQ bridge
