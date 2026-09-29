@@ -15,6 +15,10 @@ plays the matching pre-generated WAV file through the robot's USB speaker:
 A different announcement interrupts one that is still playing, so the speaker
 always reports the robot's latest decision. The same announcement arriving
 again while it is still playing is ignored instead of restarting it.
+
+It also publishes /core/announcement_playing (std_msgs/Bool): True when a
+sentence starts and False when it ends, so core_node can mute voice commands
+while the robot is talking.
 """
 
 import os
@@ -22,7 +26,7 @@ import subprocess
 import threading
 
 import rospy
-from std_msgs.msg import String
+from std_msgs.msg import Bool, String
 
 
 VALID_CODES = {
@@ -42,6 +46,12 @@ class AnnouncementPlayer:
         self.sound_dir = rospy.get_param("~sound_dir")
         self.audio_device = rospy.get_param("~audio_device", "default")
         self.topic = rospy.get_param("~topic", "/core/announcement")
+        self.playing_topic = rospy.get_param(
+            "~playing_topic", "/core/announcement_playing"
+        )
+        self.playing_pub = rospy.Publisher(
+            self.playing_topic, Bool, queue_size=10, latch=True
+        )
 
         self.lock = threading.Lock()
         self.process = None
@@ -75,6 +85,7 @@ class AnnouncementPlayer:
             if self.process is not None and self.process.poll() is None:
                 self.process.terminate()
             self.process = None
+        self.playing_pub.publish(Bool(data=False))
 
     def callback(self, msg):
         code = msg.data.strip().upper()
@@ -112,13 +123,13 @@ class AnnouncementPlayer:
                 self.process = None
                 return
 
+        self.playing_pub.publish(Bool(data=True))
         rospy.loginfo("Playing announcement: %s", code)
         threading.Thread(
-            target=self.report_errors, args=(self.process, code), daemon=True
+            target=self.wait_for_end, args=(self.process, code), daemon=True
         ).start()
 
-    @staticmethod
-    def report_errors(process, code):
+    def wait_for_end(self, process, code):
         _, stderr = process.communicate()
         # A negative return code means it was interrupted on purpose.
         if process.returncode and process.returncode > 0:
@@ -127,6 +138,14 @@ class AnnouncementPlayer:
                 code,
                 stderr.decode(errors="replace").strip(),
             )
+
+        # Report "finished" only if no newer sentence has started meanwhile.
+        with self.lock:
+            finished = self.process is process
+            if finished:
+                self.process = None
+        if finished:
+            self.playing_pub.publish(Bool(data=False))
 
 
 if __name__ == "__main__":
