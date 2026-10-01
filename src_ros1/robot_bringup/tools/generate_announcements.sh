@@ -12,6 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUT_DIR="${OUT_DIR:-${SCRIPT_DIR}/../sounds}"
 CACHE_DIR="${CACHE_DIR:-$HOME/.cache/piper}"
 VOICE="${VOICE:-en_US-lessac-medium}"
+LENGTH_SCALE="${LENGTH_SCALE:-0.9}"
 PIPER_RELEASE="2023.11.14-2"
 
 case "$(uname -m)" in
@@ -54,9 +55,9 @@ declare -A TEXT=(
     [stop_accepted]="Command Stop accepted."
     [slow_down_accepted]="Command Slow Down accepted."
     [proceed_accepted]="Command Proceed accepted."
-    [stop_rejected]="Command Stop received, but rejected due to low confidence at this distance."
-    [slow_down_rejected]="Command Slow Down received, but rejected due to low confidence at this distance."
-    [proceed_rejected]="Command Proceed received, but rejected due to low confidence at this distance."
+    [stop_rejected]="Command Stop received but rejected."
+    [slow_down_rejected]="Command Slow Down received but rejected."
+    [proceed_rejected]="Command Proceed received but rejected."
 )
 
 export LD_LIBRARY_PATH="${CACHE_DIR}/piper:${LD_LIBRARY_PATH:-}"
@@ -67,6 +68,7 @@ for name in stop_accepted slow_down_accepted proceed_accepted \
     echo "${TEXT[$name]}" | "${CACHE_DIR}/piper/piper" \
         --model "${CACHE_DIR}/${VOICE}.onnx" \
         --output_file "${OUT_DIR}/${name}.wav" \
+        --length_scale "${LENGTH_SCALE}" \
         --quiet
 done
 
