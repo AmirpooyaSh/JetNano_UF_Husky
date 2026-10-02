@@ -49,15 +49,15 @@ docker run -d \
 # Install ROS dependencies
 # ---------------------------------------------------------------
 
-docker exec "$CONTAINER_NAME" bash -lc '
-    apt-get update &&
-    source /opt/ros/humble/setup.bash &&
-    rosdep install \
-      --from-paths /root/ros2_ws/src \
-      --ignore-src \
-      --rosdistro humble \
-      -r -y
-'
+# docker exec "$CONTAINER_NAME" bash -lc '
+#     apt-get update &&
+#     source /opt/ros/humble/setup.bash &&
+#     rosdep install \
+#       --from-paths /root/ros2_ws/src \
+#       --ignore-src \
+#       --rosdistro humble \
+#       -r -y
+# '
 
 # ---------------------------------------------------------------
 # Build workspace

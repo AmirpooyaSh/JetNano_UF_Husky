@@ -71,29 +71,15 @@ YOLO_TO_GESTURE = {
 
     # SLOW DOWN
     'fist': 'Closed_Fist',
-    'grabbing': 'Closed_Fist',
-    'grip': 'Closed_Fist',
+    # 'grabbing': 'Closed_Fist',
+    # 'grip': 'Closed_Fist',
 
     # PROCEED
     'like': 'Thumb_Up',
 }
 
-# Input size for YOLO. Every hand crop is resized to this size.
-YOLO_IMAGE_SIZE = 320
-
-
-# ================================================================
-# Distance-based hand crop (pixel values are for HD1080)
-# ================================================================
-
-# Crop size (px) when the wrist is 1 m from the camera.
-# The crop shrinks with distance: size = CROP_SIZE_AT_1M / distance_m,
-# so a far hand fills more of the crop and looks bigger to YOLO.
-CROP_SIZE_AT_1M = 420
-
-# Smallest and largest crop allowed (px).
-MIN_CROP_SIZE = 96
-MAX_CROP_SIZE = 600
+# Input size for YOLO. Hand crops are 300 x 300 px, so 320 is enough.
+YOLO_IMAGE_SIZE = 300
 
 
 class ZedSkeletonYolo(Node):
@@ -106,6 +92,9 @@ class ZedSkeletonYolo(Node):
 
         self.latest_image = None
         self.latest_image_header = None
+
+        # Size of hand crop in pixels
+        self.hand_crop_size = 640
 
         # Minimum YOLO gesture confidence.
         # 0.0 = no filtering here; core_node decides acceptance.
@@ -231,23 +220,7 @@ class ZedSkeletonYolo(Node):
     # HAND CROP
     # ============================================================
 
-    def crop_size_for(self, wrist_3d):
-
-        # Distance from the camera to the wrist (m).
-        distance = math.sqrt(
-            float(wrist_3d[0]) ** 2 +
-            float(wrist_3d[1]) ** 2 +
-            float(wrist_3d[2]) ** 2
-        )
-
-        if distance <= 0.0:
-            return MAX_CROP_SIZE
-
-        size = int(CROP_SIZE_AT_1M / distance)
-
-        return max(MIN_CROP_SIZE, min(MAX_CROP_SIZE, size))
-
-    def crop_hand(self, image, wrist, elbow, wrist_3d):
+    def crop_hand(self, image, wrist, elbow):
 
         if image is None:
             return None, None
@@ -272,7 +245,7 @@ class ZedSkeletonYolo(Node):
             cx += 0.30 * (wx - ex)
             cy += 0.30 * (wy - ey)
 
-        half = self.crop_size_for(wrist_3d) // 2
+        half = self.hand_crop_size // 2
 
         h, w = image.shape[:2]
 
@@ -605,8 +578,7 @@ class ZedSkeletonYolo(Node):
                 left_crop, left_box = self.crop_hand(
                     image,
                     kp2d[LEFT_WRIST],
-                    kp2d[LEFT_ELBOW],
-                    kp3d[LEFT_WRIST]
+                    kp2d[LEFT_ELBOW]
                 )
 
                 left_gesture, left_confidence = self.classify_hand(left_crop)
@@ -632,8 +604,7 @@ class ZedSkeletonYolo(Node):
                 right_crop, right_box = self.crop_hand(
                     image,
                     kp2d[RIGHT_WRIST],
-                    kp2d[RIGHT_ELBOW],
-                    kp3d[RIGHT_WRIST]
+                    kp2d[RIGHT_ELBOW]
                 )
 
                 right_gesture, right_confidence = self.classify_hand(right_crop)

@@ -233,15 +233,15 @@ if [ "$NEEDS_BUILD" -eq 1 ]; then
 
     docker exec "$CONTAINER_NAME" /bin/bash -lc '
         set -Ee -o pipefail
-        apt-get update
+        # apt-get update
         source /opt/ros/humble/setup.bash
 
-        rosdep install \
-            --from-paths /root/ros2_ws/src \
-            --ignore-src \
-            --rosdistro humble \
-            -r \
-            -y
+        # rosdep install \
+        #     --from-paths /root/ros2_ws/src \
+        #     --ignore-src \
+        #     --rosdistro humble \
+        #     -r \
+        #     -y
 
         cd /root/ros2_ws
 
