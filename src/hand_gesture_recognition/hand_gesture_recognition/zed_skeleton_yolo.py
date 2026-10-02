@@ -94,11 +94,11 @@ class ZedSkeletonYolo(Node):
         self.latest_image_header = None
 
         # Size of hand crop in pixels
-        self.hand_crop_size = 300
+        self.hand_crop_size = 320
 
         # Minimum YOLO gesture confidence.
         # 0.0 = no filtering here; core_node decides acceptance.
-        self.gesture_threshold = 0.3
+        self.gesture_threshold = 0.5
 
         # --------------------------------------------------------
         # HaGRIDv2 YOLO gesture detector
