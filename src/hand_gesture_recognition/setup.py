@@ -39,6 +39,8 @@ setup(
             'hand_landmark_node = hand_gesture_recognition.hand_landmark_node:main',
             'zed_skeleton_visualizer = hand_gesture_recognition.zed_skeleton_visualizer:main',
             'gesture_bridge_sender = hand_gesture_recognition.ros2_to_ros1_sender:main',
+            # YOLO-based hand gesture visualization node
+            'zed_skeleton_yolo = hand_gesture_recognition.zed_skeleton_yolo:main',
         ],
     },
 )

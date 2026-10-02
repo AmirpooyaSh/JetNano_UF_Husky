@@ -26,10 +26,17 @@ def generate_launch_description():
     )
 
     # Our skeleton visualization node
-    skeleton_visualizer = Node(
+    # skeleton_visualizer = Node(
+    #     package='hand_gesture_recognition',
+    #     executable='zed_skeleton_visualizer',
+    #     name='zed_skeleton_visualizer',
+    #     output='screen'
+    # )
+    # YOLO (HaGRIDv2) version
+    skeleton_yolo = Node(
         package='hand_gesture_recognition',
-        executable='zed_skeleton_visualizer',
-        name='zed_skeleton_visualizer',
+        executable='zed_skeleton_yolo',
+        name='zed_skeleton_yolo',
         output='screen'
     )
 
@@ -42,6 +49,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         start_zed2,
-        skeleton_visualizer,
+        # skeleton_visualizer,
+        skeleton_yolo,
         gesture_bridge_sender,
     ])

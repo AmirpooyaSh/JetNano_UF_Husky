@@ -122,5 +122,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-requests \
     && rm -rf /var/lib/apt/lists/*
 
+# YOLO (HaGRIDv2) gesture detector: Ultralytics + Jetson PyTorch
+RUN python3 -m pip install --no-cache-dir ultralytics "numpy<2"
+
+RUN python3 -m pip install --no-cache-dir \
+    https://github.com/ultralytics/assets/releases/download/v0.0.0/torch-2.10.0-cp310-cp310-linux_aarch64.whl \
+    https://github.com/ultralytics/assets/releases/download/v0.0.0/torchvision-0.25.0-cp310-cp310-linux_aarch64.whl \
+    "numpy<2"
+
+RUN cd /tmp && \
+    wget -q https://developer.download.nvidia.com/compute/cudss/0.7.1/local_installers/cudss-local-tegra-repo-ubuntu2204-0.7.1_0.7.1-1_arm64.deb && \
+    dpkg -i cudss-local-tegra-repo-ubuntu2204-0.7.1_0.7.1-1_arm64.deb && \
+    cp /var/cudss-local-tegra-repo-ubuntu2204-0.7.1/cudss-*-keyring.gpg /usr/share/keyrings/ && \
+    apt-get update && apt-get install -y --no-install-recommends cudss && \
+    rm -rf /var/lib/apt/lists/* /tmp/cudss-*.deb
+
+RUN pip3 install --no-cache-dir "setuptools==58.2.0"
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["bash"]
