@@ -6,7 +6,7 @@
         general:            
             camera_model: 'zed2'
             camera_name: 'zed2' # overwritten by launch file
-            grab_resolution: 'HD2K' # The native camera grab resolution. 'HD2K', 'HD1080', 'HD720', 'VGA', 'AUTO'
+            grab_resolution: 'HD1080' # The native camera grab resolution. 'HD2K', 'HD1080', 'HD720', 'VGA', 'AUTO'
             grab_frame_rate: 10 # ZED SDK internal grabbing rate
 
         video:
@@ -16,5 +16,6 @@
 
         depth:
             min_depth: 0.10 # Min: 0.01, Max: 3.0
-            max_depth: 13.0 # Min: 0.5, Max: 13.0
+            # Hall's Distance Theory (Up to 20ft which will be 6.1m)
+            max_depth: 10.00 # Min: 0.5, Max: 13.0
 

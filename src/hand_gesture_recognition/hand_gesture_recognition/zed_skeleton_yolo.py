@@ -79,7 +79,7 @@ YOLO_TO_GESTURE = {
 }
 
 # Input size for YOLO. Hand crops are 300 x 300 px, so 320 is enough.
-YOLO_IMAGE_SIZE = 320
+YOLO_IMAGE_SIZE = 300
 
 
 class ZedSkeletonYolo(Node):
@@ -94,7 +94,7 @@ class ZedSkeletonYolo(Node):
         self.latest_image_header = None
 
         # Size of hand crop in pixels
-        self.hand_crop_size = 320
+        self.hand_crop_size = 640
 
         # Minimum YOLO gesture confidence.
         # 0.0 = no filtering here; core_node decides acceptance.
