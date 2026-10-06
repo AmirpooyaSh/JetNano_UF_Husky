@@ -58,6 +58,13 @@
 
     <include file="$(find husky_control)/launch/control.launch" />
 
+    <!-- Skid-steer: wheel yaw rate is unreliable; rotation comes from the UM7 only -->
+    <rosparam param="/ekf_localization/odom0_config">[false, false, false,
+                                                       false, false, false,
+                                                       true,  true,  true,
+                                                       false, false, false,
+                                                       false, false, false]</rosparam>
+
     <!-- Override Husky's default twist_mux topics: adds core_safety (priority 100) -->
     <rosparam command="load"
               file="$(find robot_bringup)/config/twist_mux.yaml"
