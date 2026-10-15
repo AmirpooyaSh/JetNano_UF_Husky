@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <!-- Scan topic -->
+  <arg name="scan_topic" default="front/scan"/>
+
+  <!-- GMapping laser ranges -->
+  <arg name="maxUrange" default="24.0"/>
+  <arg name="maxRange" default="25.0"/>
+
+  <!-- Run GMapping -->
+  <include file="$(find husky_navigation)/launch/gmapping.launch">
+    <arg name="scan_topic" value="$(arg scan_topic)"/>
+  </include>
+
+  <!-- Override GMapping range parameters -->
+  <param name="/slam_gmapping/maxUrange" value="$(arg maxUrange)"/>
+  <param name="/slam_gmapping/maxRange" value="$(arg maxRange)"/>
+
+  <!-- Run Move Base -->
+  <include file="$(find husky_navigation)/launch/move_base.launch" />
+
+  <!-- Override Move Base obstacle inflation (must come AFTER the move_base include) -->
+  <param name="/move_base/global_costmap/inflation/inflation_radius" value="0.05"/>
+  <param name="/move_base/global_costmap/inflation/cost_scaling_factor" value="20.0"/>
+  <param name="/move_base/local_costmap/inflation/inflation_radius" value="0.05"/>
+  <param name="/move_base/local_costmap/inflation/cost_scaling_factor" value="20.0"/>
+
+</launch>

@@ -58,12 +58,19 @@
 
     <include file="$(find husky_control)/launch/control.launch" />
 
-    <!-- Skid-steer: wheel yaw rate is unreliable; rotation comes from the UM7 only -->
-    <!-- <rosparam param="/ekf_localization/odom0_config">[false, false, false,
+     <!-- EKF inputs (skid-steer Husky + UM7 without magnetometer) -->
+     <!-- Wheels: forward speed, no sideways motion (vy = 0), yaw rate -->
+     <rosparam param="/ekf_localization/odom0_config">[false, false, false,
+                                                       false, false, false,
+                                                       true,  true,  false,
+                                                       false, false, true,
+                                                       false, false, false]</rosparam>
+     <!-- UM7: roll, pitch and all turn rates; no yaw angle, no accelerations -->
+     <rosparam param="/ekf_localization/imu0_config">[false, false, false,
+                                                       true,  true,  false,
                                                        false, false, false,
                                                        true,  true,  true,
-                                                       false, false, false,
-                                                       false, false, false]</rosparam> -->
+                                                       false, false, false]</rosparam>
 
     <!-- Override Husky's default twist_mux topics: adds core_safety (priority 100) -->
     <rosparam command="load"

@@ -206,6 +206,11 @@ catkin_install_python(
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+catkin_install_python(
+  PROGRAMS scripts/yaml_waypoint_sender.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 install(
   DIRECTORY sounds/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/sounds

@@ -10,6 +10,8 @@ set -Eeuo pipefail
 # - Rebuilds only when source/image/build configuration changed.
 # - Launches ONLY robot_bringup/robot.launch.
 # - robot.launch now also launches the ROS2 -> ROS1 gesture receiver.
+# - Sources devel_isolated (not install_isolated), so edits to existing
+#   launch/YAML/rviz/Python files in src are used live at the next launch.
 # - Does NOT open Terminator or any GUI.
 # - roslaunch stays attached to this script; Ctrl+C stops it and removes the
 #   temporary container while preserving the named build volumes.
@@ -251,6 +253,9 @@ fi
 #   - SICK LMS1xx
 #   - hand_gesture_bridge/gesture_receiver.launch
 #
+# devel_isolated is sourced first so package paths resolve to /catkin_ws/src
+# (live launch/config/script edits). install_isolated is only a fallback.
+#
 # No Terminator or interactive shell is opened.
 # -----------------------------------------------------------------------------
 echo "[INFO] Launching: ${ROBOT_LAUNCH_PACKAGE}/${ROBOT_LAUNCH_FILE}"
@@ -262,15 +267,17 @@ docker exec "$CONTAINER_NAME" /bin/bash -lc "
     set -Ee -o pipefail
     source /opt/ros/noetic/setup.bash
 
-    if [ -f /catkin_ws/install_isolated/setup.bash ]; then
-        source /catkin_ws/install_isolated/setup.bash
-    elif [ -f /catkin_ws/devel_isolated/setup.bash ]; then
+    if [ -f /catkin_ws/devel_isolated/setup.bash ]; then
         source /catkin_ws/devel_isolated/setup.bash
+    elif [ -f /catkin_ws/install_isolated/setup.bash ]; then
+        source /catkin_ws/install_isolated/setup.bash
     fi
 
     export ROS_LOG_DIR=/catkin_ws/log/ros
     mkdir -p \"\$ROS_LOG_DIR\" /catkin_ws/log/robot_bringup
     cd /catkin_ws
+
+    echo \"[INFO] robot_bringup path: \$(rospack find ${ROBOT_LAUNCH_PACKAGE})\"
 
     roslaunch '${ROBOT_LAUNCH_PACKAGE}' '${ROBOT_LAUNCH_FILE}' \
         2>&1 | tee -a '${LAUNCH_LOG}'

@@ -1,0 +1,12 @@
+frame_id: map
+
+start_pose:
+  x: -0.066
+  y: 0.027
+  yaw: -0.174
+
+waypoints:
+  - {name: waypoint_1, x: 1.831, y: -0.485, yaw: -0.521}
+  - {name: waypoint_2, x: 1.469, y: -1.433, yaw: -2.445}
+  - {name: waypoint_3, x: -0.326, y: -1.050, yaw: 2.948}
+  - {name: waypoint_4, x: -0.865, y: -0.425, yaw: 2.125}

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="obstacle_range" default="24.0"/>
+  <arg name="raytrace_range" default="25.0"/>
+  <!-- Run Move Base. Only its velocity output is remapped. -->
+  <group>
+    <remap from="/cmd_vel" to="/cmd_vel_nav"/>
+    <include file="$(find husky_navigation)/launch/move_base.launch">
+      <arg name="no_static_map" value="true"/>
+    </include>
+  </group>
+      
+  <!-- No recovery rotations; after an e-brake pause move_base simply continues the same goal -->
+  <param name="/move_base/recovery_behavior_enabled" value="false"/>
+  
+  <param name="/move_base/clearing_rotation_allowed" value="false"/>
+  <!-- Override Move Base Navigation Range -->
+  <param name="/move_base/global_costmap/obstacle_range"
+         value="$(arg obstacle_range)"/>
+  <param name="/move_base/global_costmap/raytrace_range"
+         value="$(arg raytrace_range)"/>
+  <param name="/move_base/local_costmap/obstacle_range"
+         value="$(arg obstacle_range)"/>
+  <param name="/move_base/local_costmap/raytrace_range"
+         value="$(arg raytrace_range)"/>
+  <!-- Override Move Base Obstacle Avoidance Range -->
+  <param name="/move_base/global_costmap/inflation/inflation_radius"
+         value="0.05"/>
+  <param name="/move_base/global_costmap/inflation/cost_scaling_factor"
+         value="20.0"/>
+  <param name="/move_base/local_costmap/inflation/inflation_radius"
+         value="0.05"/>
+  <param name="/move_base/local_costmap/inflation/cost_scaling_factor"
+         value="20.0"/>
+
+<!-- This is to reduce the obstacle Offset -->
+  <param name="/move_base/global_costmap/inflation/inflation_radius" value="0.05"/>
+  <param name="/move_base/local_costmap/inflation/inflation_radius" value="0.05"/>
+</launch>

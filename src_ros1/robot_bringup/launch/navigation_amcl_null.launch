@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Saved map -->
+  <arg name="map_file"
+       default="/catkin_ws/src/site_maps/office_map/office.yaml"/>
+  <!-- LiDAR topic -->
+  <arg name="scan_topic"
+       default="/front/scan"/>
+  <!-- Initial robot pose in the saved map -->
+  <arg name="start_x" default="-0.066"/>
+  <arg name="start_y" default="0.027"/>
+  <arg name="start_yaw" default="-0.174"/>
+  <!-- Load saved map -->
+  <node name="map_server"
+        pkg="map_server"
+        type="map_server"
+        args="$(arg map_file)"
+        output="screen"/>
+  <!-- AMCL initial pose -->
+  <param name="/amcl/initial_pose_x"
+         value="$(arg start_x)"/>
+  <param name="/amcl/initial_pose_y"
+         value="$(arg start_y)"/>
+  <param name="/amcl/initial_pose_a"
+         value="$(arg start_yaw)"/>
+  <!-- Run AMCL -->
+  <include file="$(find husky_navigation)/launch/amcl.launch">
+    <arg name="scan_topic" value="$(arg scan_topic)"/>
+  </include>
+  <param name="/move_base/DWAPlannerROS/odom_topic" value="/odometry/filtered"/>
+  <param name="/amcl/laser_model_type" value="likelihood_field"/>
+  <param name="/amcl/laser_max_beams" value="30"/>
+  <param name="/amcl/laser_min_range" value="0.05"/>
+  <param name="/amcl/laser_max_range" value="25.0"/>
+  <param name="/amcl/laser_z_hit" value="0.95"/>
+  <param name="/amcl/laser_z_short" value="0.1"/>
+  <param name="/amcl/laser_z_max" value="0.05"/>
+  <param name="/amcl/laser_z_rand" value="0.05"/>
+  <param name="/amcl/laser_sigma_hit" value="0.2"/>
+  <param name="/amcl/laser_lambda_short" value="0.1"/>
+  <param name="/amcl/laser_likelihood_max_dist" value="2.0"/>
+  <!-- Run Move Base. Only its velocity output is remapped. -->
+
+  <!-- No recovery rotations; after an e-brake pause move_base simply continues the same goal -->
+  <param name="/move_base/recovery_behavior_enabled" value="false"/>
+  <param name="/move_base/clearing_rotation_allowed" value="false"/>
+  
+  <group>
+    <remap from="/cmd_vel" to="/cmd_vel_nav"/>
+    <include file="$(find husky_navigation)/launch/move_base.launch"/>
+  </group>
+
+  <param name="/move_base/DWAPlannerROS/max_vel_x" value="1.0"/>
+  <param name="/move_base/DWAPlannerROS/max_vel_trans" value="1.0"/>
+  <param name="/move_base/DWAPlannerROS/max_vel_theta" value="2.0"/>
+
+<!-- This is to reduce the obstacle Offset -->
+  <param name="/move_base/global_costmap/inflation/inflation_radius" value="0.05"/>
+  <param name="/move_base/local_costmap/inflation/inflation_radius" value="0.05"/>
+
+</launch>

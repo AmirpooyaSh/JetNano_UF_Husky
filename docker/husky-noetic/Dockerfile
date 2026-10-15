@@ -254,5 +254,16 @@ RUN apt-get update && \
         ros-noetic-um7 \
     && rm -rf /var/lib/apt/lists/*
 
+# ---------------------------------------------------------------
+# Navigation: AMCL, GMapping, map_server, move_base + planners
+# ---------------------------------------------------------------
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-husky-navigation \
+    ros-noetic-navigation \
+    ros-noetic-slam-gmapping \
+    ros-noetic-dwa-local-planner \
+    ros-noetic-map-server \
+    && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["/ros_entrypoint.sh"]
 CMD ["terminator"]
