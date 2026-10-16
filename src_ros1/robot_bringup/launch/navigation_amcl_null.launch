@@ -2,14 +2,14 @@
 <launch>
   <!-- Saved map -->
   <arg name="map_file"
-       default="/catkin_ws/src/site_maps/office_map/office.yaml"/>
+       default="/catkin_ws/src/site_maps/perry_yard/perry.yaml"/>
   <!-- LiDAR topic -->
   <arg name="scan_topic"
        default="/front/scan"/>
   <!-- Initial robot pose in the saved map -->
-  <arg name="start_x" default="-0.066"/>
-  <arg name="start_y" default="0.027"/>
-  <arg name="start_yaw" default="-0.174"/>
+  <arg name="start_x" default="0"/>
+  <arg name="start_y" default="-0.003"/>
+  <arg name="start_yaw" default="0.009"/>
   <!-- Load saved map -->
   <node name="map_server"
         pkg="map_server"
@@ -28,10 +28,17 @@
     <arg name="scan_topic" value="$(arg scan_topic)"/>
   </include>
   <param name="/move_base/DWAPlannerROS/odom_topic" value="/odometry/filtered"/>
-  <param name="/amcl/laser_model_type" value="likelihood_field"/>
-  <param name="/amcl/laser_max_beams" value="30"/>
-  <param name="/amcl/laser_min_range" value="0.05"/>
-  <param name="/amcl/laser_max_range" value="25.0"/>
+  <!-- !! -->
+  <param name="/amcl/laser_model_type" value="likelihood_field_prob"/>
+  <param name="/amcl/do_beamskip" value="false"/>
+  <param name="/amcl/beam_skip_distance" value="0.5"/>
+  <param name="/amcl/beam_skip_threshold" value="0.3"/>
+  <param name="/amcl/update_min_d" value="0.1"/>   <!-- metres -->
+  <param name="/amcl/update_min_a" value="0.1"/>   <!-- radians, ~6° -->
+  <!-- !!! -->
+  <param name="/amcl/laser_max_beams" value="480"/>
+  <param name="/amcl/laser_min_range" value="0.2"/>
+  <param name="/amcl/laser_max_range" value="10.0"/>
   <param name="/amcl/laser_z_hit" value="0.95"/>
   <param name="/amcl/laser_z_short" value="0.1"/>
   <param name="/amcl/laser_z_max" value="0.05"/>

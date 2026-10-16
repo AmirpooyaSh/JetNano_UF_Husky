@@ -210,6 +210,10 @@ catkin_install_python(
   PROGRAMS scripts/yaml_waypoint_sender.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+catkin_install_python(
+  PROGRAMS scripts/reset_odom_on_start.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 install(
   DIRECTORY sounds/
