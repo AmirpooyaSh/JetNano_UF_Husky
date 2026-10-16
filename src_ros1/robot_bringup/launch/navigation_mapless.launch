@@ -32,9 +32,9 @@
   <param name="/move_base/global_costmap/inflation/inflation_radius" value="0.05"/>
   <param name="/move_base/local_costmap/inflation/inflation_radius" value="0.05"/>
 
-   <param name="/move_base/local_costmap/obstacles_laser/obstacle_range" value="$(arg obstacle_range)"/>
-   <param name="/move_base/local_costmap/obstacles_laser/raytrace_range" value="$(arg raytrace_range)"/>
-   <param name="/move_base/local_costmap/width"  value="50"/>
-   <param name="/move_base/local_costmap/height" value="50"/>
+  <param name="/move_base/local_costmap/obstacles_laser/obstacle_range" value="4.0"/>
+  <param name="/move_base/local_costmap/obstacles_laser/raytrace_range" value="4.5"/>
+  <param name="/move_base/local_costmap/width"  value="10"/>
+  <param name="/move_base/local_costmap/height" value="10"/>
 
 </launch>
