@@ -7,9 +7,9 @@
   <arg name="scan_topic"
        default="/front/scan"/>
   <!-- Initial robot pose in the saved map -->
-  <arg name="start_x" default="0"/>
-  <arg name="start_y" default="-0.003"/>
-  <arg name="start_yaw" default="0.009"/>
+  <arg name="start_x" default="0.009"/>
+  <arg name="start_y" default="-0.004"/>
+  <arg name="start_yaw" default="-0.002"/>
   <!-- Load saved map -->
   <node name="map_server"
         pkg="map_server"
@@ -38,7 +38,7 @@
   <!-- !!! -->
   <param name="/amcl/laser_max_beams" value="480"/>
   <param name="/amcl/laser_min_range" value="0.2"/>
-  <param name="/amcl/laser_max_range" value="10.0"/>
+  <param name="/amcl/laser_max_range" value="20.0"/>
   <param name="/amcl/laser_z_hit" value="0.95"/>
   <param name="/amcl/laser_z_short" value="0.1"/>
   <param name="/amcl/laser_z_max" value="0.05"/>
