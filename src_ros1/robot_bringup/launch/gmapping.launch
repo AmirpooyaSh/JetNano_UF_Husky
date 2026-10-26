@@ -5,6 +5,9 @@
   <!-- Scan topic -->
   <arg name="scan_topic" default="front/scan"/>
 
+  <!-- Zero gyro + reset odom to (0,0,0) at launch. Robot must be still on the start mark. -->
+  <node pkg="robot_bringup" type="reset_odom_on_start.py" name="reset_odom_on_start" output="screen"/>
+
   <!-- GMapping laser ranges -->
   <arg name="maxUrange" default="24.0"/>
   <arg name="maxRange" default="25.0"/>

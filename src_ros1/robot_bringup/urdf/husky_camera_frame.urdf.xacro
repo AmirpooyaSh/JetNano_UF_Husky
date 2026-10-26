@@ -274,7 +274,8 @@
   <xacro:property name="zed2_mount_z" value="0.100"/>
 
   <xacro:property name="zed2_mount_roll"  value="0.0"/>
-  <xacro:property name="zed2_mount_pitch" value="-0.523599"/>
+  <!-- Zed2 Angle is 16 Degrees -->
+  <xacro:property name="zed2_mount_pitch" value="-0.279253"/>
   <xacro:property name="zed2_mount_yaw"   value="0.0"/>
 
 
