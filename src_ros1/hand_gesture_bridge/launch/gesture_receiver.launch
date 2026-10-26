@@ -1,12 +1,15 @@
 <launch>
-
-    <node
+  <node
         pkg="hand_gesture_bridge"
         type="gesture_receiver.py"
         name="gesture_receiver"
         output="screen"
         respawn="true"
-        respawn_delay="2.0"
-    />
+        respawn_delay="2.0"/>
+
+  <node pkg="hand_gesture_bridge"
+        type="robot_footprint_marker.py"
+        name="robot_footprint_marker"
+        output="screen"/>
 
 </launch>

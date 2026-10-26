@@ -209,6 +209,7 @@ include_directories(
 # Install the ROS1 ZeroMQ receiver as an executable node.
 catkin_install_python(
   PROGRAMS
+    scripts/robot_footprint_marker.py
     scripts/gesture_receiver.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
