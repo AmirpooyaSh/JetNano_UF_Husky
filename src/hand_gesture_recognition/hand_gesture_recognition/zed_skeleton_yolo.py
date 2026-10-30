@@ -45,6 +45,8 @@ BODY_18_BONES = [
 ]
 
 
+# Fallback only. The frame actually used is the one the ZED reports in each
+# body-tracking message (zed_left_camera_frame).
 FRAME_ID = 'zed_camera_link'
 
 
@@ -106,6 +108,9 @@ class ZedSkeletonYolo(Node):
 
         self.latest_image = None
         self.latest_image_header = None
+
+        # Frame the ZED reports skeletons in (taken from each message).
+        self.frame_id = FRAME_ID
 
         # Minimum YOLO gesture confidence.
         # 0.0 = no filtering here; core_node decides acceptance.
@@ -370,7 +375,7 @@ class ZedSkeletonYolo(Node):
         cube = Marker()
 
         cube.header.stamp = stamp
-        cube.header.frame_id = FRAME_ID
+        cube.header.frame_id = self.frame_id
 
         cube.ns = f'body_{body_index}_{side}_hand'
         cube.id = marker_id
@@ -408,7 +413,7 @@ class ZedSkeletonYolo(Node):
         text = Marker()
 
         text.header.stamp = stamp
-        text.header.frame_id = FRAME_ID
+        text.header.frame_id = self.frame_id
 
         text.ns = f'body_{body_index}_{side}_gesture'
         text.id = marker_id + 1
@@ -439,6 +444,9 @@ class ZedSkeletonYolo(Node):
 
     def skeleton_callback(self, msg):
 
+        # Use the ZED's own frame (zed_left_camera_frame), not a fixed name.
+        self.frame_id = msg.header.frame_id or FRAME_ID
+
         skeleton_markers = MarkerArray()
         hand_markers = MarkerArray()
 
@@ -455,7 +463,7 @@ class ZedSkeletonYolo(Node):
         states = HandGestureStateArray()
 
         states.header.stamp = msg.header.stamp
-        states.header.frame_id = FRAME_ID
+        states.header.frame_id = self.frame_id
 
         # Latest ZED image
         image = None
@@ -495,7 +503,7 @@ class ZedSkeletonYolo(Node):
             joints = Marker()
 
             joints.header.stamp = msg.header.stamp
-            joints.header.frame_id = FRAME_ID
+            joints.header.frame_id = self.frame_id
 
             joints.ns = f'body_{body_index}_joints'
             joints.id = skeleton_marker_id
@@ -531,7 +539,7 @@ class ZedSkeletonYolo(Node):
             bones = Marker()
 
             bones.header.stamp = msg.header.stamp
-            bones.header.frame_id = FRAME_ID
+            bones.header.frame_id = self.frame_id
 
             bones.ns = f'body_{body_index}_bones'
             bones.id = skeleton_marker_id
